@@ -1,0 +1,9 @@
+---
+- name: Installing webserver(apache) & git
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apache2
+    - git

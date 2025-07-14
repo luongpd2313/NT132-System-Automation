@@ -1,0 +1,41 @@
+---
+- name: Deletes anonymous MySQL server user for localhost
+  community.mysql.mysql_user:
+    user: ""
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Update mysql root password for all root accounts
+  community.mysql.mysql_user:
+    user: root
+    host: "{{ host }}"
+    password: "{{ mysql_root_password }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL,GRANT"
+
+- name: Removes the MySQL test database
+  community.mysql.mysql_db:
+    db: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Creating dvwa DB user
+  community.mysql.mysql_user:
+    user: "{{ dvwa_db_username }}"
+    state: present
+    password: "{{ mysql_dvwa_password }}"
+    host: localhost
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: true
+    priv: "*.*:ALL,GRANT"
+
+- name: Create DVWA database
+  community.mysql.mysql_db:
+    db: dvwa
+    state: present
+    login_user: "{{ dvwa_db_username }}"
+    login_password: "{{ mysql_dvwa_password }}"

@@ -1,0 +1,4 @@
+---
+
+- ansible.builtin.include_tasks: phpinstall.yml
+- ansible.builtin.include_tasks: configchange.yml
